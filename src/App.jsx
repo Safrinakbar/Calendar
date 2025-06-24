@@ -7,6 +7,7 @@ import Month from './components/Month'
 import React , { useState,useContext,useEffect } from 'react'
 import GlobalContext from './context/GlobalContext'
 import EventModal from './components/EventModal'
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   const[currenMonth, setCurrenMonth] = useState(getMonth())
@@ -16,8 +17,8 @@ function App() {
   }, [monthIndex])
   return (
     <React.Fragment>
-      {showEventModal && <EventModal/>  }
-  
+      {showEventModal && <EventModal/>}
+      <ToastContainer />
       <div className='min-h-screen min-w-full flex flex-col bg-gradient-to-br from-white via-blue-50 to-blue-100'>
          <CalendarHeader/>
          <div className='flex flex-1 w-full max-w-[1800px] mx-auto gap-6 py-6 px-2'>

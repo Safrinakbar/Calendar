@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import GlobalContext from '../context/GlobalContext';
-
-import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const colorClass = [
   "bg-indigo-500",
@@ -15,7 +15,7 @@ const colorClass = [
 
 const EventModal = () => {
 
-  const { setShowEventModal, daySelected, dispatchCalEvents ,selectedEvent} = useContext(GlobalContext);
+  const { setShowEventModal, daySelected, dispatchCalEvents, selectedEvent } = useContext(GlobalContext);
   const [title, setTitle] = useState(selectedEvent? selectedEvent.title : '');
   const [description, setDescription] = useState(selectedEvent? selectedEvent.description : '');
   const [selectedLabel, setSelectedLabel] = useState(
@@ -26,30 +26,27 @@ const EventModal = () => {
   {
     e.preventDefault();
     const calendarEvent = {
-        title,
-        description,
-        label: selectedLabel,
-        day: daySelected.valueOf(),
-        id:selectedEvent ? selectedEvent.id : Date.now(),
+      title,
+      description,
+      label: selectedLabel,
+      day: daySelected.valueOf(),
+      id: selectedEvent ? selectedEvent.id : Date.now(),
     }
-    if(selectedEvent)
-    {
-      dispatchCalEvents({ type: "update", payload: calendarEvent});
-    }
-    else
-    {
+    if (selectedEvent) {
+      dispatchCalEvents({ type: "update", payload: calendarEvent });
+      toast.info('Event updated successfully!', { position: "top-right", autoClose: 1500 });
+    } else {
       dispatchCalEvents({ type: "push", payload: calendarEvent });
-      Swal.fire({
-        icon: 'success',
-        title: 'Event added!',
-        text: 'Your event was added successfully.',
-        timer: 1500,
-        showConfirmButton: false
-      });
+      toast.success('Event added successfully!', { position: "top-right", autoClose: 1500 });
     }
     setShowEventModal(false);
   }
 
+  function handleDelete() {
+    dispatchCalEvents({ type: "delete", payload: selectedEvent });
+    setShowEventModal(false);
+    toast.error('Event deleted!', { position: "top-right", autoClose: 1500 });
+  }
 
   return (
     <div className="h-screen w-full fixed left-0 top-0 flex justify-center items-center z-50">
@@ -59,10 +56,7 @@ const EventModal = () => {
           <div className="flex items-center gap-2">
             {selectedEvent && (
               <button type="button"
-                onClick={() => {
-                  dispatchCalEvents({ type: "delete", payload: selectedEvent });
-                  setShowEventModal(false);
-                }}>
+                onClick={handleDelete}>
                 <span className="material-icons-outlined text-gray-400 cursor-pointer">delete</span>
               </button>
             )}
@@ -138,5 +132,6 @@ const EventModal = () => {
     </div>
   );
 };
+
 
 export default EventModal;
