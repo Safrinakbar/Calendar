@@ -11,7 +11,7 @@ import { ToastContainer } from 'react-toastify';
 
 function App() {
   const[currenMonth, setCurrenMonth] = useState(getMonth())
-  const { monthIndex, showEventModal} = useContext(GlobalContext)
+  const { monthIndex, showEventModal } = useContext(GlobalContext)
   useEffect(() => {
     setCurrenMonth(getMonth(monthIndex));
   }, [monthIndex])
@@ -23,7 +23,7 @@ function App() {
          <CalendarHeader/>
          <div className='flex flex-1 w-full max-w-[1800px] mx-auto gap-6 py-6 px-2'>
           <Sidebar/>
-          <Month month={currenMonth}/>
+          <Month month={currenMonth} monthIndex={monthIndex}/>
          </div>
       </div>
     </React.Fragment>
@@ -33,3 +33,4 @@ function App() {
 
 
 export default App
+
