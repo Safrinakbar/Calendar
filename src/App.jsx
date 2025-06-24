@@ -1,6 +1,6 @@
 import './index.css'
 import "./App.css"
-import { getMonth } from './util'
+import { getMonth } from './Util'
 import CalendarHeader from './components/CalendarHeader'
 import Sidebar from './components/Sidebar'
 import Month from './components/Month'
