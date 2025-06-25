@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import GlobalContext from '../context/GlobalContext';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,16 +14,27 @@ const colorClass = [
 ];
 
 const EventModal = () => {
-
   const { setShowEventModal, daySelected, dispatchCalEvents, selectedEvent } = useContext(GlobalContext);
-  const [title, setTitle] = useState(selectedEvent? selectedEvent.title : '');
-  const [description, setDescription] = useState(selectedEvent? selectedEvent.description : '');
-  const [selectedLabel, setSelectedLabel] = useState(
-    selectedEvent ? colorClass.find(color => color === selectedEvent.label) :
-    colorClass[0]);
 
-  function handleSubmit(e)
-  {
+  // Use state for form fields
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [selectedLabel, setSelectedLabel] = useState(colorClass[0]);
+
+  // Reset form fields when daySelected or selectedEvent changes
+  useEffect(() => {
+    if (selectedEvent) {
+      setTitle(selectedEvent.title || '');
+      setDescription(selectedEvent.description || '');
+      setSelectedLabel(selectedEvent.label || colorClass[0]);
+    } else {
+      setTitle('');
+      setDescription('');
+      setSelectedLabel(colorClass[0]);
+    }
+  }, [daySelected, selectedEvent]);
+
+  function handleSubmit(e) {
     e.preventDefault();
     const calendarEvent = {
       title,
@@ -31,7 +42,7 @@ const EventModal = () => {
       label: selectedLabel,
       day: daySelected.valueOf(),
       id: selectedEvent ? selectedEvent.id : Date.now(),
-    }
+    };
     if (selectedEvent) {
       dispatchCalEvents({ type: "update", payload: calendarEvent });
       toast.info('Event updated successfully!', { position: "top-right", autoClose: 1500 });
@@ -122,7 +133,6 @@ const EventModal = () => {
           <footer className="flex justify-end">
             <button
               type="submit"
-              onClick={handleSubmit}
               className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded text-white">
               Save
             </button>
