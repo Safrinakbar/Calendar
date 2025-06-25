@@ -7,7 +7,7 @@ const staticEvents = [
   },
   {
     id: 2,
-    title: "Doctor Appointment",
+    title: "Doctor checkup",
     description: "Annual checkup at 10:00 AM.",
     label: "bg-green-500"
   },
